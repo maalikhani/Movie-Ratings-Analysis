@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 
-# create a datatype dic , its help us to optimize code and resource usage in compute systems.
-
+# Define a dictionary specifying the data types for each column
+# This helps optimize memory usage and speeds up data processing
 dtype_dict = {
     "id": "category",
     "title": "string",
@@ -16,10 +16,10 @@ dtype_dict = {
     "imdb_votes": "Int32"
 }
 
-#describe variable path of dataset in system:
+# Define the path to the CSV file containing the dataset
 csv_path = r'C:\users\maryam\Desktop\Netflix TV Shows and Movies.csv'
 
-#create a dataframe with read_csv function from pandas lib , in this dataframe creation , i used of 3 keyword argumans
+# Load the dataset into a pandas DataFrame with specified dtypes and indexing
 df = pd.read_csv(
     csv_path,
     dtype=dtype_dict,
@@ -27,46 +27,52 @@ df = pd.read_csv(
     low_memory=False
 )
 
-
+# Display the first 5 rows of the DataFrame to verify successful loading
+print("First 5 rows of the dataset:")
 print(df.head())
 
-#to see a columns without data (non columns)
-print("\nColumns with missing values:")
-print(df.isnull().sum().sort_values(ascending=False).loc[lambda x: x > 0])
+# Identify columns that contain missing values and display their counts
+print("\nColumns with missing values and their counts:")
+missing_values = df.isnull().sum().sort_values(ascending=False)
+print(missing_values[missing_values > 0])
 
-#Sort and filter movies based on ratings or genres.
+# Sort the DataFrame by 'imdb_score' in descending order and display top 10 entries
 sorted_by_rating = df.sort_values(by='imdb_score', ascending=False)
+print("\nTop 10 movies/shows sorted by IMDb score:")
 print(sorted_by_rating.head(10))
 
+# Calculate the average IMDb rating grouped by 'type' (e.g., Movie, Show)
 average_rating_by_genre = df.groupby('type', observed=False)['imdb_score'].mean()
+print("\nAverage IMDb rating by type (genre):")
 print(average_rating_by_genre)
-print()
 
-#Calculate basic statistics (mean, median, standard deviation) for ratings.
+# Calculate basic statistics (mean, median, standard deviation) for IMDb ratings
 mean_rating = df['imdb_score'].mean()
 median_rating = df['imdb_score'].median()
 std_rating = df['imdb_score'].std()
 
-print(f"Mean IMDb Rating: {mean_rating}")
-print(f"Median IMDb Rating: {median_rating}")
-print(f"Standard Deviation of IMDb Rating: {std_rating}")
-print()
+print(f"\nMean IMDb Rating: {mean_rating:.3f}")
+print(f"Median IMDb Rating: {median_rating:.3f}")
+print(f"Standard Deviation of IMDb Rating: {std_rating:.3f}")
 
-#Filter the dataset to find: Movies with ratings above a certain threshold (e.g., 4 stars). - Movies from a specific year or genre
+# Filter movies/shows with IMDb rating above a threshold (e.g., 4 stars)
 ratings_array = df['imdb_score'].to_numpy()
 high_rating_filter = ratings_array > 4
 high_rating_movies = df[high_rating_filter]
-
+print("\nMovies/shows with IMDb rating above 4:")
 print(high_rating_movies.head())
-print()
 
+# Filter movies/shows released in the year 2020
 year_2020_movies = df[df['release_year'] == 2020]
+print("\nMovies/shows released in 2020:")
 print(year_2020_movies.head())
 
-print()
-
+# Filter only movies (excluding shows)
 movies_only = df[df['type'] == 'MOVIE']
+print("\nOnly movies from the dataset:")
 print(movies_only.head())
 
+# Combine filters: movies with rating > 7 released in 2022
 filtered = df[(df['imdb_score'] > 7) & (df['release_year'] == 2022)]
+print("\nMovies with IMDb rating above 7 released in 2022:")
 print(filtered.head())
