@@ -41,12 +41,13 @@ sorted_by_rating = df.sort_values(by='imdb_score', ascending=False)
 print("\nTop 10 movies/shows sorted by IMDb score:")
 print(sorted_by_rating.head(10))
 
-# Calculate the average IMDb rating grouped by 'type' (e.g., Movie, Show)
+# Calculate the average IMDb rating grouped by content type (e.g., Movie, Show)
 average_rating_by_genre = df.groupby('type', observed=False)['imdb_score'].mean()
 print("\nAverage IMDb rating by type (genre):")
 print(average_rating_by_genre)
 
 # Calculate basic statistics (mean, median, standard deviation) for IMDb ratings
+df_score_clean = df['imdb_score'].dropna()
 mean_rating = df['imdb_score'].mean()
 median_rating = df['imdb_score'].median()
 std_rating = df['imdb_score'].std()
