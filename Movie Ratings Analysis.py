@@ -4,7 +4,7 @@ import numpy as np
 # Define a dictionary specifying the data types for each column
 # This helps optimize memory usage and speeds up data processing
 dtype_dict = {
-    "id": "category",
+    "id": "category", # default dtype detected by pandas was object(in my research i found that category is more optimize than object)
     "title": "string",
     "type": "category",
     "description": "string",
@@ -13,7 +13,7 @@ dtype_dict = {
     "runtime": "int16",
     "imdb_id": "category",
     "imdb_score": "float32",
-    "imdb_votes": "Int32"
+    "imdb_votes": "Int32" #Int32 because of nun value columns in dataset
 }
 
 # Define the path to the CSV file containing the dataset
